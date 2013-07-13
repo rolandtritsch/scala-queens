@@ -28,7 +28,7 @@ object Queens extends Logging {
     for {
       solution <- solutions
       pos <- rowSet(size, row)
-      if solution forall (_ legal pos)
+      if(solution.forall(_.legal(pos)))
     } yield pos :: solution
 
   def seed(size: Int) = rowSet(size, 0) map (sol => List(sol))
