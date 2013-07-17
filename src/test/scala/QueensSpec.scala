@@ -10,18 +10,18 @@ class QueensSpec extends FlatSpec {
     assert(!Queens.Pos(1,1).legal(Queens.Pos(3,3)), "(1,1)(2,3) should be illegal")
   }
 
-  "A row set" should "return positions" in {
-    assert(Queens.rowSet(4,0).mkString(",") === "Pos(0,0),Pos(0,1),Pos(0,2),Pos(0,3)")
+  "A row" should "return positions in that row" in {
+    assert(Queens.rowList(4,0).mkString(",") === "Pos(0,0),Pos(0,1),Pos(0,2),Pos(0,3)")
+  }
+
+  "Seeding" should "return the list of possible start points for solutions" in {
+    assert(Queens.seed(4).mkString(",") === "List(Pos(0,0)),List(Pos(0,1)),List(Pos(0,2)),List(Pos(0,3))")
   }
 
   "Expanding" should "return a full board" in {
-    val possibleSolutions = Queens.expand(Queens.seed(4), 4, 4)
-    assert(possibleSolutions.size == 12, "There should be 12 possible solutions")
-
-    // expand returns an iterator and in Scala you cannot reset an iterator, means ...
-    // ... I need to get a new one ...
-    val possibleSolutions2 = Queens.expand(Queens.seed(4), 4, 4)
-    assert(possibleSolutions2.mkString(",") === "List(Pos(4,1), Pos(0,0)),List(Pos(4,2), Pos(0,0)),List(Pos(4,3), Pos(0,0)),List(Pos(4,0), Pos(0,1)),List(Pos(4,2), Pos(0,1)),List(Pos(4,3), Pos(0,1)),List(Pos(4,0), Pos(0,2)),List(Pos(4,1), Pos(0,2)),List(Pos(4,3), Pos(0,2)),List(Pos(4,0), Pos(0,3)),List(Pos(4,1), Pos(0,3)),List(Pos(4,2), Pos(0,3))")
+    val possibleSolutions = Queens.expand(Queens.seed(4), 4, 4-1)
+    assert(possibleSolutions.size === 10, "There should be 10 possible combinations")
+    assert(possibleSolutions.mkString(",") === "List(Pos(3,1), Pos(0,0)),List(Pos(3,2), Pos(0,0)),List(Pos(3,0), Pos(0,1)),List(Pos(3,2), Pos(0,1)),List(Pos(3,3), Pos(0,1)),List(Pos(3,0), Pos(0,2)),List(Pos(3,1), Pos(0,2)),List(Pos(3,3), Pos(0,2)),List(Pos(3,1), Pos(0,3)),List(Pos(3,2), Pos(0,3))")
   }
 
   "Solving the problem" should "return valid solutions" in {

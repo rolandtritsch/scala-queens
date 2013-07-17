@@ -13,7 +13,9 @@ package org.tritsch.scala.queens
 
 import com.typesafe.scalalogging.slf4j.Logging
 
+/** Main class/object to solve the N Queens problem. */
 object Queens extends Logging {
+  /** Describe a position on the board. Also checks, if putting another Queens into position p is legal. */
   case class Pos(row: Int, column: Int) {
     def sameRow(p: Pos) = row == p.row
     def sameColumn(p: Pos) = column == p.column
@@ -22,27 +24,34 @@ object Queens extends Logging {
     def legal(p: Pos) = !illegal(p)
   }
 
-  def rowSet(size: Int, row: Int) = (Iterator.tabulate(size)(column => Pos(row, column))).toList
+  /** @return a row as a list of positions. */
+  def rowList(size: Int, row: Int) = (0 until size).toList.map(column => Pos(row, column))
 
-  def expand(solutions: List[List[Pos]], size: Int, row: Int) =
+  /** @return a list of possible solutions with the first queen placed on each. */
+  def seed(size: Int) = rowList(size, 0).map(sol => List(sol))
+
+  /** @return expand the list of existing solutions with one more queen and look for legal positions. */
+  def expand(solutions: List[List[Pos]], size: Int, row: Int) = {
+    logger.debug(size + "/" + row + "/" + solutions.size + "/" + solutions(0).size)
+    logger.trace("" + solutions)
     for {
       solution <- solutions
-      pos <- rowSet(size, row)
+      pos <- rowList(size, row)
       if(solution.forall(_.legal(pos)))
     } yield pos :: solution
-
-  def seed(size: Int) = rowSet(size, 0) map (sol => List(sol))
-
-  def solve(size: Int) = (1 until size).foldLeft(seed(size)) (expand(_, size, _))
-
-  def mkString(solutions: List[List[Pos]]): String = {
-    solutions.map(s => {
-      val board = Array.fill(s.size)(Array.fill(s.size)("."))
-      s.map(p => p match {case Pos(r, c) => board(r)(c) = "Q"})
-      board.map(_.mkString(" ")).mkString("\n")
-    }).mkString("\n\n")
   }
 
+  /** @return expand the first set of solutions with N queens. */
+  def solve(size: Int) = (1 until size).foldLeft(seed(size))(expand(_, size, _))
+
+  /** @return a string that shows/dumps a board/solution (for debugging). */
+  def dump(s: List[Pos]): String = {
+    val board = Array.fill(s.size)(Array.fill(s.size)("."))
+    s.map(p => p match {case Pos(r, c) => board(r)(c) = "Q"})
+    board.map(_.mkString(" ")).mkString("\n")
+  }
+
+  /** Main method to solve the N Queens problem. */
   def main(args: Array[String]): Unit = {
     require(args.size == 1, "Usage: Queens <n>")
     val n = args(0).toInt
@@ -51,7 +60,7 @@ object Queens extends Logging {
     val solutions = solve(n)
 
     logger.info("Found >" + solutions.size + "< solutions ...")
-    logger.info("\n" + mkString(solutions))
+    logger.info("\n" + solutions.map(s => dump(s)).mkString("\n\n"))
     println(solutions.size)
   }
 }
