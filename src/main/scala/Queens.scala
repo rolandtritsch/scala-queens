@@ -34,11 +34,11 @@ object Queens extends Logging {
   def expand(solutions: List[List[Pos]], size: Int, row: Int) = {
     logger.debug(size + "/" + row + "/" + solutions.size + "/" + solutions(0).size)
     logger.trace("" + solutions)
-    for {
-      solution <- solutions
+    (for {
+      solution <- solutions.par
       pos <- rowList(size, row)
       if(solution.forall(_.legal(pos)))
-    } yield pos :: solution
+    } yield pos :: solution).toList
   }
 
   /** @return expand the first set of solutions with N queens. */
