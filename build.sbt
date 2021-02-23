@@ -1,11 +1,12 @@
-name := "scala-queens"
+val scala3Version = "3.0.0-RC1"
 
-version := "1.0"
-
-scalaVersion := "2.13.2"
-
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.1.2"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.2" % "test"
-
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
-libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+lazy val root = project
+  .in(file("."))
+  .settings(
+    name := "scala-queens",
+    version := "0.1.0",
+    scalaVersion := scala3Version,
+    libraryDependencies += "de.sciss" %% "log" % "0.1.1",
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.5",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.5" % "test"
+  )

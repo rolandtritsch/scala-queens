@@ -11,10 +11,11 @@
 
 package org.tritsch.scala.queens
 
-import com.typesafe.scalalogging.LazyLogging
+import de.sciss.log._
 
 /** Main class/object to solve the N Queens problem. */
-object Queens extends LazyLogging {
+object Queens {
+  val logger = new Logger("demo", Level.Info, Console.err)
 
   /** Describe a position on the board. Also checks, if putting another Queens into position p is legal. */
   case class Pos(row: Int, column: Int) {
@@ -35,9 +36,9 @@ object Queens extends LazyLogging {
   /** @return expand the list of existing solutions with one more queen and look for legal positions. */
   def expand(solutions: List[List[Pos]], size: Int, row: Int) = {
     logger.debug(
-      size + "/" + row + "/" + solutions.size + "/" + solutions(0).size
+      s"${size}/${row}/${solutions.size}/${solutions(0).size}"
     )
-    logger.trace("" + solutions)
+    logger.debug(solutions.toString)
     (for {
       solution <- solutions
       pos <- rowList(size, row)
@@ -60,10 +61,10 @@ object Queens extends LazyLogging {
     require(args.size == 1, "Usage: Queens <n>")
     val n = args(0).toInt
 
-    logger.info("Calculating solutions for boards of size >" + n + "< ...")
+    logger.info(s"Calculating solutions for boards of size >${n}< ...")
     val solutions = solve(n)
 
-    logger.info("Found >" + solutions.size + "< solutions ...")
+    logger.info(s"Found >${solutions.size}< solutions ...")
     logger.info("\n" + solutions.map(s => dump(s)).mkString("\n\n"))
     println(solutions.size)
   }
