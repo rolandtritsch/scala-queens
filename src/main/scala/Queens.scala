@@ -15,7 +15,7 @@ import de.sciss.log._
 
 /** Main class/object to solve the N Queens problem. */
 object Queens {
-  val logger = new Logger("demo", Level.Info, Console.err)
+  val logger = new Logger("scala-queens", Level.Info, Console.err)
 
   /** Describe a position on the board. Also checks, if putting another Queens into position p is legal. */
   case class Pos(row: Int, column: Int) {
