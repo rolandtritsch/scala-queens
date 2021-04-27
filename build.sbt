@@ -1,12 +1,25 @@
-val scala3Version = "3.0.0-RC1"
+lazy val commonSettings = Seq(
+  name := "scala-queens",
+  version := "0.3.0",
+  scalaVersion := "3.0.0-RC1",
+  scalacOptions ++= Seq(
+    "-Xfatal-warnings"
+  )
+)
+
+lazy val libsLogging = Seq(
+  libraryDependencies += "org.codehaus.janino" % "janino" % "3.1.3",
+  libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3",
+  libraryDependencies += "org.log4s" %% "log4s" % "1.10.0-M5"
+)
+
+lazy val libsTesting = Seq(
+  libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.5",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.5" % "test"
+)
 
 lazy val root = project
   .in(file("."))
-  .settings(
-    name := "scala-queens",
-    version := "0.1.0",
-    scalaVersion := scala3Version,
-    libraryDependencies += "de.sciss" %% "log" % "0.1.1",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.5",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.5" % "test"
-  )
+  .settings(commonSettings)
+  .settings(libsLogging)
+  .settings(libsTesting)

@@ -11,11 +11,9 @@
 
 package org.tritsch.scala.queens
 
-import de.sciss.log._
-
 /** Main class/object to solve the N Queens problem. */
 object Queens {
-  val logger = new Logger("scala-queens", Level.Info, Console.err)
+  private val logger = org.log4s.getLogger
 
   /** Describe a position on the board. Also checks, if putting another Queens into position p is legal. */
   case class Pos(row: Int, column: Int) {
